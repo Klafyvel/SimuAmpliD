@@ -113,15 +113,15 @@ ax = fig.add_subplot(111)
 
 # SETTINGS
 
-t_max = 10**(-2)
+t_max = 10**(-2) # s
 
-f_music = 1000
-music_ampl = 4
+f_music = 1000 # Hz
+music_ampl = 4 # V
 
-R1 = 10**3
-R2 = 22*10**3
-C = 470*10**(-12)
-VCC = 12
+R1 = 10**3 # Ohms
+R2 = 22*10**3 # Ohms
+C = 470*10**(-12) # Farrad
+VCC = 12 # V
 
 
 
