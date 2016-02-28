@@ -92,7 +92,7 @@ class SignalIntergrator:
         self.t = 0
         self.t_prgm = 0
         self.last_input = 0
-        self.last_value = VCC/2
+        self.last_value = 0#VCC/2
 
     def get_value(self, t, input_signal):
         dt = t - self.t_prgm
@@ -113,7 +113,7 @@ ax = fig.add_subplot(111)
 
 # SETTINGS
 
-t_max = 10**(-2) # s
+t_max = 10**(-3) # s
 
 f_music = 1000 # Hz
 music_ampl = 4 # V
@@ -123,9 +123,11 @@ R2 = 22*10**3 # Ohms
 C = 470*10**(-12) # Farrad
 VCC = 12 # V
 
+integr_amplification = 70
 
+revert_R1_R2 = True
 
-show_ne = False
+show_ne = True
 show_ao = False
 show_music = True
 show_integr = True
@@ -141,6 +143,10 @@ ax.set_ylabel('U (v)')
 
 
 # Calcs
+
+if revert_R1_R2:
+    R1,R2 = R2,R1
+
 s_ne = SignalNE555(R1=R1, R2=R2, C=C, VCC=VCC)
 s_music = SignalMusic(f=f_music, A=music_ampl)
 s_ao = SignalComp(VCC)
@@ -151,7 +157,7 @@ X = np.arange(0,t_max,10**-4/500) #np.linspace(0,10**-4, 500)
 Y_NE555 = [s_ne.get_value(t) for t in X]
 Y_MUSIC = [s_music.get_value(t) for t in X]
 Y_AO = [s_ao.get_value(Y_MUSIC[x], Y_NE555[x]) for x,_ in enumerate(X)]
-Y_INTEGR = [s_integr.get_value(t,Y_AO[x]) for x,t in enumerate(X)]
+Y_INTEGR = [s_integr.get_value(t,Y_AO[x])*integr_amplification+VCC/2 for x,t in enumerate(X)]
 
 if show_ne:
     pl.plot(X,Y_NE555, label='NE555 (signal de découpage)')
